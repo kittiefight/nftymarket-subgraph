@@ -1,0 +1,55 @@
+specVersion: 0.0.2
+description: Kittiefight NFT Marketplace
+repository: https://github.com/kittiefight/nftymartket-subgraph
+schema:
+  file: ./schema.graphql
+dataSources:
+  # ---------------------------------------------------------
+  # ORDERS --------------------------------------------------
+  # ---------------------------------------------------------
+  - kind: ethereum/contract
+    name: Marketplace
+    network: {{network}}
+    source:
+      address: '{{address:Marketplace}}'
+      abi: Marketplace
+      startBlock: {{startBlock:Marketplace}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.3
+      language: wasm/assemblyscript
+      file: ./src/handlers/marketplace.ts
+      entities:
+        - Order
+        - NFT
+      abis:
+        - name: Marketplace
+          file: ./abis/Marketplace.json
+      eventHandlers:
+        - event: OrderCreated(bytes32,indexed uint256,indexed address,address,uint256,uint256)
+          handler: handleOrderCreated
+        - event: OrderSuccessful(bytes32,indexed uint256,indexed address,address,uint256,indexed address)
+          handler: handleOrderSuccessful
+        - event: OrderCancelled(bytes32,indexed uint256,indexed address,address)
+          handler: handleOrderCancelled
+
+  - kind: ethereum/contract
+    name: LegacyNFT
+    network: {{network}}
+    source:
+      address: '{{address:LegacyNFT}}'
+      abi: LegacyNFT
+      startBlock: {{startBlock:LegacyNFT}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.3
+      language: wasm/assemblyscript
+      file: ./src/handlers/nft.ts
+      entities:
+        - LegacyNFT
+      abis:
+        - name: LegacyNFT
+          file: ./abis/LegacyNFT.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
