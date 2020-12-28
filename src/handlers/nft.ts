@@ -29,7 +29,7 @@ import { toLowerCase } from '../modules/utils'
 import * as categories from '../modules/category/categories'
 import * as addresses from '../data/addresses'
 import * as status from '../modules/order/status'
-import { buildLegacyNFTFromNFT } from '../modules/legacynft'
+import { buildLegacyNFTFromNFT, getLegacyNFTImage } from '../modules/legacynft'
 
 export function handleTransfer(event: Transfer): void {
   // log.warning('transfer params {} {} {}', [event.params._tokenId.toHexString(), event.params._from.toString(), event.params._to.toString()])
@@ -114,6 +114,8 @@ export function handleTransfer(event: Transfer): void {
     if (category == categories.LEGACYNFT) {
       let legacy = buildLegacyNFTFromNFT(nft)
       legacy.save()
+      nft.name = 'Sample NFT #' + nft.tokenId.toString()
+      nft.image = getLegacyNFTImage(nft.id)
       nft.legacyNFT = legacy.id
     }
 

@@ -65,10 +65,8 @@ type Bid @entity {
 type LegacyNFT @entity {
   id: ID!
   owner: Account!
-  name: String # TODO: consider adding '!'
   description: String
   generation: Int
-  image: String
   nft: NFT @derivedFrom(field: "legacyNFT")
 }
 

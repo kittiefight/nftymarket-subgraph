@@ -5,10 +5,8 @@ export function buildLegacyNFTFromNFT(nft: NFT): LegacyNFT {
 
   legacy.id = nft.id
   legacy.owner = nft.owner
-  legacy.name = 'Sample NFT #' + nft.tokenId.toString()
-  legacy.description = 'Description of ' + legacy.name
+  legacy.description = 'Description of Sample NFT #' + nft.tokenId.toString()
   legacy.generation = 0
-  legacy.image = getLegacyNFTImage(nft.id)
 
   return legacy
 }
